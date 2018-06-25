@@ -1,0 +1,237 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Compute.MultiVm",
+    "version": "0.1.2-preview",
+    "parameters": {
+        "basics": [
+            {
+				"name": "adminUsername",
+				"type": "Microsoft.Compute.UserNameTextBox",
+				"label": "VM username",
+				"toolTip": "Administrative username for the virtual machines.",
+				"osPlatform": "Linux",
+				"constraints": {
+				  "required": true
+                }
+            },
+            {
+				"name": "adminPassword",
+				"type": "Microsoft.Compute.CredentialsCombo",
+				"label": {
+				  "authenticationType": "Authentication type",
+				  "password": "Password",
+				  "confirmPassword": "Confirm password",
+				  "sshPublicKey": "SSH public key"
+				},
+				"constraints": {
+				  "required": true
+				},
+				"options": {
+				  "hideConfirmation": false
+				},
+                "osPlatform": "Linux"
+            }
+        ],
+        "steps": [
+            {
+                "name": "vmSettings",
+                "label": "Virtual Machine Settings",
+                "subLabel": {
+                    "preValidation": "Configure the Authentication Manager appliance",
+                    "postValidation": "Done!"
+                },
+                "bladeTitle": "vmSettings",
+                "elements": [
+                    {
+                        "name": "virtualMachineName",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Virtual Machine name",
+                        "toolTip": "Assign a name to your Azure Authentication Manager application",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": true,
+                            "regex": "[a-z][a-z0-9-]{2,20}[a-z0-9]$",
+                            "validationMessage": "Must be 3-20 characters."
+                        }
+                    },
+					{
+						 "name": "virtualMachineSize",
+						 "type": "Microsoft.Compute.SizeSelector",
+						 "label": "Size",
+						 "toolTip": "",
+						 "recommendedSizes": [
+						    "Standard_D8S_v3",
+							"Standard_D4S_v3",
+							"Standard_D2S_v3"
+						  ],						 
+						 "osPlatform": "Linux",
+						 "visible": true
+					},
+                    {
+                         "name": "NetworkInterfaceName",
+                         "type": "Microsoft.Common.TextBox",
+                         "label": "Network Interface Name",
+                         "toolTip": "Network Interface Name",
+                         "constraints": {
+                              "required": true,
+                              "regex": "^[a-z0-9A-Z]{1,30}$",
+                              "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-30 characters long."
+                            },
+                         "visible": true
+                    },
+                    {
+                         "name": "NetworkInterfacePrivateIP",
+                         "type": "Microsoft.Common.TextBox",
+                         "label": "Network Interface Private IP",
+                         "toolTip": "Network Interface Private IP",
+                         "constraints": {
+                             "required": true,
+                            },
+                         "visible": true
+                    },
+                    {
+                         "name": "ImageResourceID",
+                         "type": "Microsoft.Common.TextBox",
+                         "label": "Authentication manager Image Resource ID",
+                         "toolTip": "Authentication manager Image Resource ID",
+                         "constraints": {
+                             "required": true,
+                            },
+                         "visible": true
+                    }
+                ]
+            },
+			{
+                "name": "networkSettings",
+                "label": "Network settings",
+                "subLabel": {
+                    "preValidation": "Configure the Network settings",
+                    "postValidation": "Done!"
+                },
+                "bladeTitle": "networkSettings",
+                "elements": [
+                    {
+                        "name": "virtualNetwork",
+                        "type": "Microsoft.Network.VirtualNetworkCombo",
+                        "label": {
+                            "virtualNetwork": "Virtual network",
+                            "subnets": "Subnets"
+                        },
+                        "toolTip": {
+                            "virtualNetwork": "Virtual Network Name",
+                            "subnets": "Subnet required for Azure Application"
+                        },
+                        "subnets": {
+                            "subnet1": {
+                                "label": "Subnet name"
+                            }
+                        }
+                    },
+					{
+                        "name":"networkSecurityGroupName",
+                        "type":"Microsoft.Common.TextBox",
+                        "label":"Network Security Group Name",
+                        "toolTip":"Network Security Group Name",
+                        "visible": true,
+                        "constraints":{
+                            "required":true,
+                    },
+					{
+                        "name": "diagnosticStorageAccounts",
+                        "type": "Microsoft.Storage.MultiStorageAccountCombo",
+                        "label": {
+                            "prefix": "Diagnostic Storage account name prefix",
+                            "type": "Storage account type"
+                        }
+                    }
+                ]
+            },
+			{
+                "name": "userData",
+                "label": "User Data",
+                "subLabel": {
+                    "preValidation": "User custom data",
+                    "postValidation": "Done!"
+                },
+                "bladeTitle": "userData",
+                "elements": [
+					{
+                        "name":"gateway",
+                        "type":"Microsoft.Common.TextBox",
+                        "label":"Gateway",
+                        "toolTip":"Gateway",
+                        "visible": true,
+                        "constraints":{
+                            "required":true,
+                    },
+					{
+                        "name":"DNSName",
+                        "type":"Microsoft.Common.TextBox",
+                        "label":"DNS Name",
+                        "toolTip":"DNS Name",
+                        "visible": true,
+                        "constraints":{
+                            "required":true,
+                    },
+					{
+                        "name":"subNetmask",
+                        "type":"Microsoft.Common.TextBox",
+                        "label":"Subnet Mask",
+                        "toolTip":"Subnet Mask",
+                        "visible": true,
+                        "constraints":{
+                            "required":true,
+                    },
+					{
+                        "name":"primaryDNS",
+                        "type":"Microsoft.Common.TextBox",
+                        "label":"Primary DNS",
+                        "toolTip":"Primary DNS",
+                        "visible": true,
+                        "constraints":{
+                            "required":true,
+                    },
+					{
+                        "name":"secondaryDNS",
+                        "type":"Microsoft.Common.TextBox",
+                        "label":"Secondary DNS",
+                        "toolTip":"Secondary DNS",
+                        "visible": true,
+                        "constraints":{
+                            "required":true,
+                    },
+					{
+                        "name":"accessKey",
+                        "type":"Microsoft.Common.TextBox",
+                        "label":"Quick setup Access code",
+                        "toolTip":"Quick setup Access code",
+                        "visible": true,
+                        "constraints":{
+                            "required":true,
+                    }
+                ]
+            }
+        ],
+        "outputs": {
+		    "adminUsername": "[basics('adminUsername')]",
+            "authenticationType": "[basics('adminCredentials').authenticationType]",
+            "adminPassword": "[basics('adminCredentials').password]",
+            "sshPublicKey": "[basics('adminCredentials').sshPublicKey]",
+            "virtualMachineName": "[steps('vmSettings').virtualMachineName]",
+            "virtualMachineSize": "[steps('vmSettings').virtualMachineSize]",
+			"NetworkInterfaceName": "[steps('vmSettings').NetworkInterfaceName]",
+			"NetworkInterfacePrivateIP": "[steps('vmSettings').NetworkInterfacePrivateIP]",
+			"ImageResourceID": "[steps('vmSettings').ImageResourceID]",
+            "virtualNetworkName": "[steps('networkSettings').virtualNetwork.name]",
+            "subnetName": "[steps('networkSettings').virtualNetwork.subnets.subnet1.name]",
+			"networkSecurityGroupName": "[steps('networkSettings').networkSecurityGroupName]",
+			"diagnosticStorageAccounts": "[steps('networkSettings').diagnosticStorageAccounts]",
+			"diagnosticStorageAccounts": "[steps('userData').diagnosticStorageAccounts]",
+			"diagnosticStorageAccounts": "[steps('userData').diagnosticStorageAccounts]",
+			"diagnosticStorageAccounts": "[steps('userData').diagnosticStorageAccounts]",
+			"diagnosticStorageAccounts": "[steps('userData').diagnosticStorageAccounts]",
+			"diagnosticStorageAccounts": "[steps('userData').diagnosticStorageAccounts]",
+			"diagnosticStorageAccounts": "[steps('userData').diagnosticStorageAccounts]"
+        }
+    }
+}
